@@ -1,4 +1,3 @@
-import java.util.ArrayList;
 /**
  * The class WeatherPatterns finds the longest span of days in which
  * each day’s temperature is higher than on the previous day in that sequence.
@@ -13,7 +12,7 @@ public class WeatherPatterns {
      * @param temperatures list of temperature values
      * @return the longest run of days with increasing temperatures
      */
-    public static int longestWarmingTrend(int[] temperatures, boolean haha) {
+    public static int longestWarmingTrend(int[] temperatures) {
         int len = temperatures.length;
         if (len == 1) return 1;
         // longestTo[i] is the length of the longest valid sequence that ends at index i
@@ -34,32 +33,4 @@ public class WeatherPatterns {
         }
         return longest;
     }
-
-    private static final int HIGHEST_TEMP = 130;
-    private static final int LOWEST_TEMP = -50;
-
-    public static int longestWarmingTrend(int[] temperatures) {
-        int len = temperatures.length;
-        if (len <= 1) return len;
-        int[] longestTo = new int[HIGHEST_TEMP - LOWEST_TEMP + 1];
-
-        int longest = 1;
-
-        // TODO: deal with negative temperatures
-        // longestTo[i] is the longest sequence that ends at the NUMBER i - LOWEST_TEMP (not position i like before)
-        longestTo[temperatures[0]] = 1;
-        for (int i = 1; i < len; i++) {
-            int nextTemp = temperatures[i];
-            for (int lastTemp = nextTemp - 1; lastTemp >= LOWEST_TEMP; lastTemp--) {
-                if (longestTo[lastTemp - LOWEST_TEMP] != 0) {
-                    longestTo[nextTemp] = longestTo[lastTemp - LOWEST_TEMP] + 1;
-                    break;
-                }
-            }
-            longest = Integer.max(longest, longestTo[nextTemp - LOWEST_TEMP]);
-        }
-
-        return longest;
-    }
-
 }
