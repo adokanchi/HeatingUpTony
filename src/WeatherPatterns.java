@@ -13,52 +13,53 @@ public class WeatherPatterns {
      * @param temperatures list of temperature values
      * @return the longest run of days with increasing temperatures
      */
-    public static int longestWarmingTrend(int[] temperatures) {
-        return longestWarmingTrend(temperatures, 0);
-
-//        int len = temperatures.length;
-//        if (len == 1) return 1;
-//        // seqLen[i] is the length of the longest valid sequence that ends at index i
-//        // the solution to the problem is the largest value in seqLen
-//        int[] seqLen = new int[len];
-//        seqLen[0] = 1;
-//        // longestSeq is the length of the longest sequence (aka the largest value in seqLen)
-//        int longestSeq = 0;
-//        for (int i = 1; i < len; i++) {
-//            int longestSubseq = 0;
-//            for (int j = 0; j < i; j++) {
-//                if (temperatures[i] > temperatures[j] && seqLen[j] > longestSubseq) {
-//                    longestSubseq = seqLen[j];
-//                }
-//            }
-//            seqLen[i] = 1 + longestSubseq;
-//            // Keep track of longestSeq while populating seqLen to avoid having to do a linear pass at the end
-//            if (seqLen[i] > longestSeq) longestSeq = seqLen[i];
-//        }
-//        return longestSeq;
-    }
-
-    // Returns the longest sequence starting at index idx
-    public static int longestWarmingTrend(int[] temperatures, int startIdx) {
+    public static int longestWarmingTrend(int[] temperatures, boolean haha) {
         int len = temperatures.length;
         if (len == 1) return 1;
-
-        int longestLen = 0;
-        int lowest = 130; // highest value possible given problem constraints
-
-        for (int idx = startIdx; idx < len; idx++) {
-            int current = temperatures[idx];
-            if (current < lowest) {
-                lowest = current;
-                int newLen = longestWarmingTrend(temperatures, idx);
-                if (newLen > longestLen) longestLen = newLen;
+        // longestTo[i] is the length of the longest valid sequence that ends at index i
+        // the solution to the problem is the largest value in longestTo
+        int[] longestTo = new int[len];
+        longestTo[0] = 1;
+        // longest is the length of the longest sequence (aka the largest value in longestTo)
+        int longest = 0;
+        for (int i = 1; i < len; i++) {
+            int longestSubseq = 0;
+            for (int j = 0; j < i; j++) {
+                if (temperatures[i] > temperatures[j] && longestTo[j] > longestSubseq) {
+                    longestSubseq = longestTo[j];
+                }
             }
-            else {
-                // TODO
-                // This is the part that I'm struggling to do in less than linear time.
+            longestTo[i] = 1 + longestSubseq;
+            if (longestTo[i] > longest) longest = longestTo[i];
+        }
+        return longest;
+    }
+
+    private static final int HIGHEST_TEMP = 130;
+    private static final int LOWEST_TEMP = -50;
+
+    public static int longestWarmingTrend(int[] temperatures) {
+        int len = temperatures.length;
+        if (len <= 1) return len;
+        int[] longestTo = new int[HIGHEST_TEMP - LOWEST_TEMP + 1];
+
+        int longest = 1;
+
+        // TODO: deal with negative temperatures
+        // longestTo[i] is the longest sequence that ends at the NUMBER i - LOWEST_TEMP (not position i like before)
+        longestTo[temperatures[0]] = 1;
+        for (int i = 1; i < len; i++) {
+            int nextTemp = temperatures[i];
+            for (int lastTemp = nextTemp - 1; lastTemp >= LOWEST_TEMP; lastTemp--) {
+                if (longestTo[lastTemp - LOWEST_TEMP] != 0) {
+                    longestTo[nextTemp] = longestTo[lastTemp - LOWEST_TEMP] + 1;
+                    break;
+                }
             }
+            longest = Integer.max(longest, longestTo[nextTemp - LOWEST_TEMP]);
         }
 
-        return longestLen;
+        return longest;
     }
+
 }
