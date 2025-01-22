@@ -14,13 +14,12 @@ public class WeatherPatterns {
      */
     public static int longestWarmingTrend(int[] temperatures) {
         int len = temperatures.length;
-        if (len == 1) return 1;
         // longestTo[i] is the length of the longest valid sequence that ends at index i
         // the solution to the problem is the largest value in longestTo
         int[] longestTo = new int[len];
         longestTo[0] = 1;
         // longest is the length of the longest sequence (aka the largest value in longestTo)
-        int longest = 0;
+        int longest = 1;
         for (int i = 1; i < len; i++) {
             int longestSubseq = 0;
             for (int j = 0; j < i; j++) {
