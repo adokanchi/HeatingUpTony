@@ -15,45 +15,21 @@ public class WeatherPatterns {
      * @return the longest run of days with increasing temperatures
      */
 
-    private static int[] longestTo;
-
-
     public static int longestWarmingTrend(int[] temperatures) {
         int len = temperatures.length;
-
-
-        ArrayList<ArrayList<Integer>> adjacencyList = new ArrayList<ArrayList<Integer>>();
-
-
-        for (int i = 0; i < len; i++) {
-            adjacencyList.add(new ArrayList<Integer>());
-        }
-
-        for (int i = 0; i < len; i++) {
-            for (int j = 0; j < i; j++) {
-                if (temperatures[i] > temperatures[j]) {
-                    adjacencyList.get(i).add(j);
-                }
-            }
-        }
-
-        // longestTo[i] is the length of the longest valid sequence that ends at index i
-        // the solution to the problem is the largest value in longestTo
-        longestTo = new int[len];
-        // longest is the length of the longest sequence (aka the largest value in longestTo)
         int longest = 1;
-        for (int i = 0; i < len; i++) {
-            longestTo[i] = longestPathTo(i, adjacencyList);
-            longest = Integer.max(longest, longestTo[i]);
+        // longestTo[i] is the length of the longest valid sequence that ends at index i
+        // The solution to the problem is the largest value in longestTo
+        int[] longestTo = new int[len];
+        longestTo[0] = 1;
+        for (int i = 1; i < len; i++) {
+            int nextTemp = temperatures[i];
+            for (int j = 0; j < i; j++) {
+                if (nextTemp > temperatures[j]) longestTo[i] = Integer.max(longestTo[i], longestTo[j]);
+            }
+            longestTo[i] += 1;
+            longest = Integer.max(longestTo[i], longest);
         }
         return longest;
-    }
-
-    public static int longestPathTo(int endIdx, ArrayList<ArrayList<Integer>> adjacencyList) {
-        int longest = 0;
-        for (int i : adjacencyList.get(endIdx)) {
-            longest = Integer.max(longest, longestTo[i]);
-        }
-        return longest + 1;
     }
 }
