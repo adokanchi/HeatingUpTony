@@ -1,3 +1,5 @@
+import java.util.ArrayList;
+
 /**
  * The class WeatherPatterns finds the longest span of days in which
  * each day’s temperature is higher than on the previous day in that sequence.
@@ -12,24 +14,48 @@ public class WeatherPatterns {
      * @param temperatures list of temperature values
      * @return the longest run of days with increasing temperatures
      */
+
+    private static int[] longestTo;
+
+
     public static int longestWarmingTrend(int[] temperatures) {
         int len = temperatures.length;
-        // longestTo[i] is the length of the longest valid sequence that ends at index i
-        // the solution to the problem is the largest value in longestTo
-        int[] longestTo = new int[len];
-        longestTo[0] = 1;
-        // longest is the length of the longest sequence (aka the largest value in longestTo)
-        int longest = 1;
-        for (int i = 1; i < len; i++) {
-            int longestSubseq = 0;
+
+
+        ArrayList<ArrayList<Integer>> adjacencyList = new ArrayList<ArrayList<Integer>>();
+
+
+        for (int i = 0; i < len; i++) {
+            adjacencyList.add(new ArrayList<Integer>());
+        }
+
+        for (int i = 0; i < len; i++) {
             for (int j = 0; j < i; j++) {
-                if (temperatures[i] > temperatures[j] && longestTo[j] > longestSubseq) {
-                    longestSubseq = longestTo[j];
+                if (temperatures[i] > temperatures[j]) {
+                    adjacencyList.get(i).add(j);
                 }
             }
-            longestTo[i] = 1 + longestSubseq;
-            if (longestTo[i] > longest) longest = longestTo[i];
+        }
+
+        // longestTo[i] is the length of the longest valid sequence that ends at index i
+        // the solution to the problem is the largest value in longestTo
+        longestTo = new int[len];
+        // longest is the length of the longest sequence (aka the largest value in longestTo)
+        int longest = 1;
+        for (int i = 0; i < len; i++) {
+            longestTo[i] = longestPathTo(i, adjacencyList);
+            longest = Integer.max(longest, longestTo[i]);
         }
         return longest;
+    }
+
+    public static int longestPathTo(int endIdx, ArrayList<ArrayList<Integer>> adjacencyList) {
+        if (endIdx == 0) return 1;
+
+        int longest = 0;
+        for (int i : adjacencyList.get(endIdx)) {
+            longest = Integer.max(longest, longestTo[i]);
+        }
+        return longest + 1;
     }
 }
