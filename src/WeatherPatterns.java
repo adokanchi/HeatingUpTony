@@ -1,5 +1,3 @@
-import java.util.ArrayList;
-
 /**
  * The class WeatherPatterns finds the longest span of days in which
  * each day’s temperature is higher than on the previous day in that sequence.
