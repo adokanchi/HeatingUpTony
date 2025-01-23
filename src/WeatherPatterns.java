@@ -50,8 +50,6 @@ public class WeatherPatterns {
     }
 
     public static int longestPathTo(int endIdx, ArrayList<ArrayList<Integer>> adjacencyList) {
-        if (endIdx == 0) return 1;
-
         int longest = 0;
         for (int i : adjacencyList.get(endIdx)) {
             longest = Integer.max(longest, longestTo[i]);
