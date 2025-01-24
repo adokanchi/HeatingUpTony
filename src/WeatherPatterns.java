@@ -1,3 +1,4 @@
+
 /**
  * The class WeatherPatterns finds the longest span of days in which
  * each day’s temperature is higher than on the previous day in that sequence.
@@ -26,7 +27,7 @@ public class WeatherPatterns {
                 if (nextTemp > temperatures[j]) longestTo[i] = Integer.max(longestTo[i], longestTo[j]);
             }
             longestTo[i] += 1;
-            longest = Integer.max(longestTo[i], longest);
+            longest = Math.max(longestTo[i], longest);
         }
         return longest;
     }
